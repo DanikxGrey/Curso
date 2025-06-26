@@ -590,3 +590,82 @@ Se quiser, posso te mostrar como verificar o charset real de uma tabela e ver se
 
 
 
+como fazer comentarios no mysql
+
+O ChatGPT disse:
+Ótima pergunta! Fazer comentários no MySQL (e em SQL no geral) é super útil para deixar seu código mais organizado, explicativo e fácil de entender no futuro.
+
+✅ Existem 3 formas principais de comentar no MySQL:
+🟩 1. Comentário de linha única com --
+Use dois hífens seguidos de um espaço:
+
+sql
+Copiar
+Editar
+-- Este é um comentário de uma linha
+SELECT * FROM pessoas;
+⚠️ Importante: tem que ter um espaço depois dos dois traços.
+
+🟨 2. Comentário de linha única com #
+Estilo semelhante ao que se usa em Python:
+
+sql
+Copiar
+Editar
+# Este também é um comentário de uma linha
+SELECT nome FROM pessoas;
+Esse estilo é aceito no MySQL, mas não é compatível com outros bancos SQL (como PostgreSQL). Use se estiver 100% focado em MySQL.
+
+🟦 3. Comentário de múltiplas linhas com /* ... */
+Esse tipo de comentário é ideal para blocos maiores ou comentar várias linhas de uma vez:
+
+sql
+Copiar
+Editar
+/*
+  Esta consulta retorna os dados da tabela pessoas,
+  incluindo nome, sexo e peso.
+  Pode ser usada em relatórios semanais.
+*/
+SELECT nome, sexo, peso FROM pessoas;
+Você também pode usar esse tipo para comentar um trecho temporariamente:
+
+sql
+Copiar
+Editar
+SELECT nome, sexo, peso
+/* , altura */ 
+FROM pessoas;
+✅ Dica prática
+Você pode usar comentários para:
+
+Explicar o que uma tabela ou campo faz.
+
+Deixar lembretes (ex: -- TODO: corrigir este SELECT)
+
+Desativar parte do código para testar.
+
+Documentar scripts complexos.
+
+🎯 Exemplo completo
+sql
+Copiar
+Editar
+-- Cria a tabela pessoas
+CREATE TABLE pessoas (
+  id INT PRIMARY KEY AUTO_INCREMENT,  -- identificador único
+  nome VARCHAR(30) NOT NULL,
+  nascimento DATE,
+  sexo ENUM('M', 'F'),
+  peso DECIMAL(5,2),
+  altura DECIMAL(3,2),
+  nacionalidade VARCHAR(20)
+);
+
+/*
+Inserção de dados de exemplo:
+Esses dados são usados para testes iniciais do sistema.
+*/
+INSERT INTO pessoas (nome, nascimento, sexo, peso, altura, nacionalidade)
+VALUES ('Ana Maria', '1990-04-10', 'F', 58.50, 1.65, 'Brasileira');
+Se quiser, posso te mostrar como comentar em stored procedures ou em ferramentas visuais como o MySQL Workbench também!
