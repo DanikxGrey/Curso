@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cupom</title>
+</head>
+
+<body>
+    <h1>Cupom</h1>
+    <p id="mensagem"> Teste se o seu cupom funciona </p>
+    <input type="text" id="nome" placeholder="Digite o seu nome:">
+    <button id="botao" onclick="mensagem()"> Verificar </button>"
+
+    <script>
+        function mensagem() {
+            const men = document.getElementById("mensagem");
+            const nomeDigitado = "Laura";
+            const name = document.getElementById("nome").value;
+            const bot = document.getElementById("botao");
+
+            if (name === nomeDigitado) {
+                men.innerHTML = "Olá, Laura!"
+            }
+            else {
+                men.innerHTML = "Seu nome não foi encontrado"
+            }
+
+        }
+    </script>
+    
+</body>
+
+</html>
