@@ -29,7 +29,7 @@ function VerificarLogin() {
         }, 750);
 
         setInterval(() => {
-            window.location.href = "https://deepwoken.co/builder"
+            window.location.href = "site2.html"
         }, 1000);
     }
 
@@ -40,16 +40,31 @@ function VerificarLogin() {
            resultado.innerHTML = "Tente novamente" 
         }, 1500);
         
-// Limpa os campos de texto
+        // Limpa os campos de texto
         login.value = ""
         senha.value = ""
 
     }
 
 } // fim da funçao
+    
+async function carregarCurso(curso) {
+    const areaTexto = document.getElementById("explicacao");
+    areaTexto.innerHTML = "Carregando informações...";
 
+    try {
+        await new Promise(resolve => setTimeout(resolve, 250));
 
-//    const input = document.getElementById("login").ariaValueMax;
-//    const mensagem = document.getElementById("mensagem");
-//    let encontrado = false;
-//    for let i = 0(palavras.lenght);
+        const mensagens = {
+            "javascript": "Curso de JavaScript.",
+            "py": "Curso de Python.",
+            "html e css": "Curso de HTML e CSS.",
+            "banco": "Curso de Banco de Dados MySql."
+        };
+
+        areaTexto.innerHTML = mensagens[curso] || "Curso não encontrado.";
+    } catch (erro) {
+        areaTexto.innerHTML = "Erro: " + erro.message;
+        console.error("Erro capturado", erro);
+    }
+} //fim da função
