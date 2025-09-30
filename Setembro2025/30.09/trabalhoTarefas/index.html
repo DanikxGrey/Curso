@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarefas-To-Do</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="##2c3e50" />
+
+    <style>
+        :root {
+            /* Root armazena variaveis no css */
+            --bg-light: #f9f9f9;
+            --bg-dark: #2c3e50;
+        }
+    </style>
+
+</head>
+
+<body>
+    <button class="" onclick="">🌗</button>
+
+    <h1>📝 Lista de Tarefas</h1>
+
+    <div class="1"
+        <input id="1" type="text" placeholder="Digite uma tarefa nova"/>
+        <button onclick="adicionarTarefa()">➕</button>
+    </div>
+
+    <ul id="lista">Lista</ul>
+
+
+</body>
+
+</html>
+
+<!-- Prompt gpt
+ 
+Perfeito! Vamos montar um **PWA de Lista de Tarefas (To-Do List)** simples, com tudo **integrado em um único arquivo HTML** — ou seja:
+
+* ✅ HTML com **CSS embutido (`<style>`)**
+* ✅ JS embutido (`<script>`)
+* ✅ Sem arquivos externos
+* ✅ Pronto para ser instalado como PWA com `manifest.json`
+
+---
+
+## ✅ Funcionalidades que vamos incluir:
+
+1. Adicionar tarefa
+2. Marcar tarefa como concluída
+3. Remover tarefa
+4. Armazenar tudo no `localStorage`
+5. Modo escuro
+6. Manifesto PWA básico (em JSON separado)
+
+---
+
+## 📄 `index.html` (único arquivo com HTML, CSS e JS)
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Tarefas</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#2c3e50" />
+  <style>
+    :root {
+      --bg-light: #f9f9f9;
+      --bg-dark: #2c3e50;
+      --text-light: #333;
+      --text-dark: #f1f1f1;
+      --accent: #3498db;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: var(--bg-light);
+      color: var(--text-light);
+      transition: 0.3s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .modo-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .input-area {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+    }
+
+    .input-area button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: white;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    body.dark li {
+      background: #34495e;
+      border-color: #555;
+      color: var(--text-dark);
+    }
+
+    .done {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .actions button {
+      margin-left: 10px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    @media (max-width: 600px) {
+      .input-area input {
+        font-size: 14px;
+      }
+
+      .input-area button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="modo-btn" onclick="alternarModo()">🌗</button>
+  <h1>📝 Lista de Tarefas</h1>
+
+  <div class="input-area">
+    <input id="novaTarefa" type="text" placeholder="Digite uma tarefa..." />
+    <button onclick="adicionarTarefa()">➕</button>
+  </div>
+
+  <ul id="lista"></ul>
+
+  <script>
+    const input = document.getElementById('novaTarefa');
+    const lista = document.getElementById('lista');
+
+    let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+
+    function salvar() {
+      localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    }
+
+    function renderizar() {
+      lista.innerHTML = '';
+      tarefas.forEach((tarefa, index) => {
+        const li = document.createElement('li');
+        li.className = tarefa.feita ? 'done' : '';
+        li.innerHTML = `
+          <span>${tarefa.texto}</span>
+          <div class="actions">
+            <button onclick="toggle(${index})">✅</button>
+            <button onclick="remover(${index})">🗑️</button>
+          </div>
+        `;
+        lista.appendChild(li);
+      });
+    }
+
+    function adicionarTarefa() {
+      const texto = input.value.trim();
+      if (!texto) return;
+      tarefas.push({ texto, feita: false });
+      input.value = '';
+      salvar();
+      renderizar();
+    }
+
+    function remover(index) {
+      tarefas.splice(index, 1);
+      salvar();
+      renderizar();
+    }
+
+    function toggle(index) {
+      tarefas[index].feita = !tarefas[index].feita;
+      salvar();
+      renderizar();
+    }
+
+    function alternarModo() {
+      document.body.classList.toggle('dark');
+      const modo = document.body.classList.contains('dark') ? 'dark' : 'light';
+      localStorage.setItem('modo', modo);
+    }
+
+    function carregarModo() {
+      const modo = localStorage.getItem('modo');
+      if (modo === 'dark') {
+        document.body.classList.add('dark');
+      }
+    }
+
+    // Inicialização
+    carregarModo();
+    renderizar();
+  </script>
+
+</body>
+</html>
+```
+
+---
+
+## 🧾 `manifest.json` (salve como arquivo separado)
+
+```json
+{
+  "name": "Lista de Tarefas",
+  "short_name": "Tarefas",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#2c3e50",
+  "theme_color": "#2c3e50",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+```
+
+Você também precisa:
+
+* Criar dois ícones (`icon-192.png` e `icon-512.png`)
+* Colocá-los na mesma pasta do HTML
+
+---
+
+## 🛠️ (Opcional) `service-worker.js` — se quiser suporte offline
+
+Se quiser um exemplo básico de *service worker* para PWA, posso te passar também.
+
+---
+
+## ✅ O que você já pode testar
+
+1. Crie uma pasta com `index.html`, `manifest.json` e os ícones.
+2. Abra o `index.html` no navegador.
+3. Você verá:
+
+   * Campo de tarefas
+   * Botões de ação
+   * Modo escuro
+   * Armazenamento local funcionando
+4. Teste no celular: o navegador deve sugerir instalar como aplicativo.
+
+---
+
+Se quiser adicionar **notificações**, **gráficos**, **sistema de categorias**, ou transformar em **PWA completo com service worker**, posso te ajudar com isso também. Só avisar!
+
+
+-->
