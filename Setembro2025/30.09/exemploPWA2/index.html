@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Diário com Emoções</title>
+<style>
+:root {
+  --bg-light: #f9f9f9;
+  --bg-dark: #1e1e1e;
+  --text-light: #222;
+  --text-dark: #f1f1f1;
+  --feliz: #fff59d;
+  --triste: #90caf9;
+  --irritado: #ef9a9a;
+  --calmo: #a5d6a7;
+  --confuso: #ce93d8;
+}
+body {
+  font-family: sans-serif;
+  background: var(--bg-light);
+  color: var(--text-light);
+  padding: 20px;
+  transition: 0.3s;
+  margin: 0;
+}
+body.dark {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+.modo-btn {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  background: #444;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 1000;
+}
+h1 {
+  margin-top: 60px;
+}
+.toolbar {
+  margin-bottom: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.toolbar button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  flex: 1 1 auto;
+  min-width: 80px;
+}
+.btn-feliz { background: var(--feliz); }
+.btn-triste { background: var(--triste); }
+.btn-irritado { background: var(--irritado); }
+.btn-calmo { background: var(--calmo); }
+.btn-confuso { background: var(--confuso); }
+.editor {
+  border: 1px solid #ccc;
+  padding: 15px;
+  min-height: 450px;
+  border-radius: 6px;
+  background: #fff;
+  color: #000;
+  outline: none;
+
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-y: auto;
+  max-width: 100%;
+  line-height: 1.4;
+}
+
+body.dark .editor {
+  background: #2a2a2a;
+  color: var(--text-dark);
+  border-color: #444;
+}
+
+/* Post-it estilo corrigido */
+.postit {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin: 0 4px 4px 0; /* margem maior para espaçar mais */
+  position: relative;
+  color: #000;
+  max-width: 40%;
+  box-sizing: border-box;
+  word-break: break-word;
+  font-size: 14px;
+  background-clip: padding-box;
+}
+
+/* Postits aninhados */
+.postit .postit {
+  margin-left: 10px;
+  max-width: 90%;
+  font-size: 13px;
+  padding: 4px 6px;
+}
+
+.postit-text {
+  flex: 1 1 auto;
+  outline: none;
+  min-width: 30px;
+}
+
+.remove-postit {
+  font-size: 14px;
+  color: black;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 12px;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0;
+  user-select: none;
+}
+
+/* Cores dos postits */
+.feliz    { background: var(--feliz); }
+.triste   { background: var(--triste); }
+.irritado { background: var(--irritado); }
+.calmo    { background: var(--calmo); }
+.confuso  { background: var(--confuso); }
+
+#saved-entries {
+  margin-top: 30px;
+}
+.entry {
+  background: #fff;
+  padding: 30px 10px 15px 15px; /* espaço extra no topo para data + botão */
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  position: relative;
+  word-break: break-word;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+body.dark .entry {
+  background: #2a2a2a;
+  border-color: #444;
+  color: var(--text-dark);
+}
+.entry-time {
+  font-size: 11px;
+  color: gray;
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  user-select: none;
+}
+.delete-entry {
+  position: absolute;
+  top: 28px; /* logo abaixo da data/hora */
+  right: 10px;
+  background: #d33;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Responsividade para celular */
+@media (max-width: 600px) {
+  .editor {
+    min-height: 450px;
+    font-size: 16px;
+  }
+  .toolbar button {
+    flex: 1 1 48%;
+    min-width: unset;
+  }
+}
+</style>
+
+
+
+</head>
+
+
+
+<body>
+
+<button class="modo-btn" onclick="alternarModo()">🌗 Modo</button>
+<h1>📝 Diário com Emoções</h1>
+
+<div class="toolbar">
+  <button class="btn-feliz" onclick="inserirPostit('feliz')">😊 Feliz</button>
+  <button class="btn-triste" onclick="inserirPostit('triste')">😢 Triste</button>
+  <button class="btn-irritado" onclick="inserirPostit('irritado')">😠 Irritado</button>
+  <button class="btn-calmo" onclick="inserirPostit('calmo')">😌 Calmo</button>
+  <button class="btn-confuso" onclick="inserirPostit('confuso')">😕 Confuso</button>
+  <button onclick="salvarEntrada()">💾 Salvar</button>
+</div>
+
+<div id="editor" class="editor" contenteditable="true"></div>
+
+<div id="status"></div>
+
+<h2>📂 Entradas Salvas</h2>
+<div id="saved-entries"></div>
+
+<script>
+const editor = document.getElementById('editor');
+const savedContainer = document.getElementById('saved-entries');
+const status = document.getElementById('status');
+
+function inserirPostit(tipo) {
+  const sel = window.getSelection();
+  if (!sel.rangeCount) return;
+
+  const span = document.createElement('span');
+  span.className = `postit ${tipo}`;
+  span.contentEditable = false;
+
+  const textDiv = document.createElement('div');
+  textDiv.className = 'postit-text';
+  textDiv.contentEditable = true;
+
+  const removeBtn = document.createElement('button');
+  removeBtn.innerText = '✖';
+  removeBtn.className = 'remove-postit';
+  removeBtn.onclick = e => {
+    e.stopPropagation();
+    span.remove();
+  };
+
+  span.appendChild(textDiv);
+  span.appendChild(removeBtn);
+
+  const range = sel.getRangeAt(0);
+  range.deleteContents();
+  range.insertNode(span);
+
+  // Mover o cursor para dentro do post-it para digitar
+  const newRange = document.createRange();
+  newRange.selectNodeContents(textDiv);
+  newRange.collapse(true);
+  sel.removeAllRanges();
+  sel.addRange(newRange);
+}
+
+function salvarEntrada() {
+  const conteudo = editor.innerHTML.trim();
+  if (!conteudo) {
+    status.innerText = '⚠️ Nada para salvar.';
+    return;
+  }
+
+  const data = new Date().toLocaleString('pt-BR');
+  const entradas = JSON.parse(localStorage.getItem('entradas') || '[]');
+  entradas.unshift({ conteudo, data });
+  localStorage.setItem('entradas', JSON.stringify(entradas));
+
+  editor.innerHTML = '';
+  status.innerText = '✅ Entrada salva!';
+  setTimeout(() => status.innerText = '', 2000);
+  carregarEntradas();
+}
+
+function carregarEntradas() {
+  savedContainer.innerHTML = '';
+  const entradas = JSON.parse(localStorage.getItem('entradas') || '[]');
+  entradas.forEach((e, i) => {
+    const div = document.createElement('div');
+    div.className = 'entry';
+
+    const time = document.createElement('div');
+    time.className = 'entry-time';
+    time.innerText = e.data;
+
+    const content = document.createElement('div');
+    content.innerHTML = e.conteudo;
+
+    // Desativa edição dos postits nas entradas salvas
+    content.querySelectorAll('.postit-text').forEach(pt => {
+      pt.removeAttribute('contenteditable');
+    });
+
+    const del = document.createElement('button');
+    del.className = 'delete-entry';
+    del.innerText = 'Apagar';
+    del.onclick = () => {
+      entradas.splice(i, 1);
+      localStorage.setItem('entradas', JSON.stringify(entradas));
+      carregarEntradas();
+    };
+
+    div.appendChild(time);
+    div.appendChild(content);
+    div.appendChild(del);
+    savedContainer.appendChild(div);
+  });
+}
+
+function alternarModo() {
+  document.body.classList.toggle('dark');
+  const modo = document.body.classList.contains('dark') ? 'dark' : 'light';
+  localStorage.setItem('modo', modo);
+}
+
+function carregarModo() {
+  const modo = localStorage.getItem('modo');
+  if (modo === 'dark') document.body.classList.add('dark');
+}
+
+carregarModo();
+carregarEntradas();
+</script>
+
+</body>
+</html>
