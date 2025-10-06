@@ -2,33 +2,63 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarefas-To-Do</title>
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="##2c3e50" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tarefas-To-Do</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="##2c3e50" />
 
-    <style>
-        :root {
-            /* Root armazena variaveis no css */
-            --bg-light: #f9f9f9;
-            --bg-dark: #2c3e50;
-        }
-    </style>
+  <style>
+    :root {
+      /* Root armazena variaveis no css */
+      --bg-light: #f9f9f9;
+      --bg-dark: #2c3e50;
+    }
+  </style>
 
 </head>
 
 <body>
-    <button class="" onclick="">🌗</button>
 
-    <h1>📝 Lista de Tarefas</h1>
+  <button class="modo-btn" onclick="alternarModo()">🌗</button>
+  <h1>📝 Lista de Tarefas</h1>
 
-    <div class="1"
-        <input id="1" type="text" placeholder="Digite uma tarefa nova"/>
-        <button onclick="adicionarTarefa()">➕</button>
-    </div>
+  <div class="input-area">
+    <input id="novaTarefa" type="text" placeholder="Adicione uma tarefa" />
+    <button onclick="adicionarTarefa()">➕</button>
+  </div>
 
-    <ul id="lista">Lista</ul>
+  <ul id="lista"></ul>
+
+  <script>
+    const novaTarefa = document.getElementById('novaTarefa');
+    const lista = document.getElementById('lista');
+
+    let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+
+    function salvar() {
+      localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    }
+
+    function renderizar() {
+      lista.innerHTML = '';
+      tarefas.forEach((tarefa, index) => {
+        const li = document.createElement('li');
+        li.className = tarefa.feita ? 'done' : '';
+        li.innerHTML = `
+          <span>${tarefa.texto}</span>
+          <div class="actions">
+            <button onclick="toggle(${index})">✅</button>
+            <button onclick="remover(${index})">🗑️</button>
+          </div>
+        `;
+        lista.appendChild(li);
+      });
+    }
+
+
+  </script>
+
 
 
 </body>
@@ -177,7 +207,11 @@ Perfeito! Vamos montar um **PWA de Lista de Tarefas (To-Do List)** simples, com 
     }
   </style>
 </head>
-<body>
+
+-->
+
+
+<!-- <body>
 
   <button class="modo-btn" onclick="alternarModo()">🌗</button>
   <h1>📝 Lista de Tarefas</h1>
@@ -189,31 +223,14 @@ Perfeito! Vamos montar um **PWA de Lista de Tarefas (To-Do List)** simples, com 
 
   <ul id="lista"></ul>
 
-  <script>
-    const input = document.getElementById('novaTarefa');
-    const lista = document.getElementById('lista');
+-->
 
-    let tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+<!--  <script>
+    
 
-    function salvar() {
-      localStorage.setItem('tarefas', JSON.stringify(tarefas));
-    }
 
-    function renderizar() {
-      lista.innerHTML = '';
-      tarefas.forEach((tarefa, index) => {
-        const li = document.createElement('li');
-        li.className = tarefa.feita ? 'done' : '';
-        li.innerHTML = `
-          <span>${tarefa.texto}</span>
-          <div class="actions">
-            <button onclick="toggle(${index})">✅</button>
-            <button onclick="remover(${index})">🗑️</button>
-          </div>
-        `;
-        lista.appendChild(li);
-      });
-    }
+
+
 
     function adicionarTarefa() {
       const texto = input.value.trim();
