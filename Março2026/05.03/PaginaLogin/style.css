@@ -1,0 +1,71 @@
+ body {
+     margin: 0;
+     padding: 0;
+     font-family: Arial, Helvetica, sans-serif;
+
+     /* Fundo estilizado */
+     background: linear-gradient(135deg, #1e3c72, #2a5298);
+     height: 100vh;
+
+     /* Centralizar tudo */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     margin: 0;
+     height: 100vh;
+
+     background:
+         linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+         url("imagenFundo.jpg");
+
+     background-size: cover;
+     background-position: center;
+ }
+
+ form {
+     background-color: rgba(0, 0, 0, 0.8);
+     padding: 30px;
+     border-radius: 10px;
+     width: 300px;
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+     color: white;
+     transform: translate(-400px);
+     animation: slideIn 3s forwards;
+ }
+
+ @keyframes slideIn {
+     to {
+         transform: translateX(0);
+     }
+
+ }
+
+ h2 {
+     text-align: center;
+     margin-bottom: 20px;
+ }
+
+ input {
+     width: 100%;
+     padding: 10px;
+     margin-top: 5px;
+     margin-bottom: 15px;
+     border-radius: 5px;
+     border: none;
+ }
+
+ input[type="button"] {
+     background-color: #ffcc00;
+     font-weight: bold;
+     cursor: pointer;
+     transition: 0.3s;
+ }
+
+ input[type="button"]:hover {
+     background-color: #ffaa00;
+     transform: scale(1.05);
+ }
+
+ input::placeholder {
+     color: #999;
+ }
